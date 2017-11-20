@@ -138,7 +138,7 @@ class Attribute {
       }
     }
     else if (!this._validator(input)) {
-      throw new AttributeValidationError(this.name, input, true);
+      throw new AttributeValidationError(this.name, input, this.isOptional);
     }
     return input;
   }
