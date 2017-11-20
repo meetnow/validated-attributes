@@ -1,0 +1,10 @@
+[ignore]
+<PROJECT_ROOT>/lib/*
+<PROJECT_ROOT>/node_modules/config-chain/test/broken.json
+
+[include]
+
+[libs]
+
+[options]
+experimental.const_params=true

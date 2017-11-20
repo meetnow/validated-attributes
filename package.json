@@ -1,0 +1,53 @@
+{
+  "name": "validated-attributes",
+  "description": "Declarative attributes validation library",
+  "version": "0.9.0",
+  "author": "@meetnow",
+  "engines": {
+    "node": ">=7.0"
+  },
+  "bugs": {
+    "url": "https://github.com/meetnow/validated-attributes/issues"
+  },
+  "contributors": [
+    "Patrick Schneider <patrick.schneider@meetnow.eu>"
+  ],
+  "dependencies": {
+    "es6-error": "^4.0.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.0.2",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2017-node7": "^0.5.2",
+    "cross-env": "^5.1.1",
+    "eslint": "^4.11.0",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-restricted-globals": "^0.1.1",
+    "flow-bin": "^0.59.0"
+  },
+  "homepage": "https://github.com/meetnow/validated-attributes",
+  "keywords": [
+    "validator",
+    "validation",
+    "validate"
+  ],
+  "license": "MIT",
+  "main": "./lib/index",
+  "jsnext:main": "./lib/index.jsnext.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meetnow/validated-attributes.git"
+  },
+  "scripts": {
+    "build": "npm run build:commonjs && npm run build:es",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src/index.js --out-file lib/index.js",
+    "build:es": "cross-env BABEL_ENV=es babel src/index.js --out-file lib/index.jsnext.js",
+    "prepublish": "npm run build",
+    "linter": "eslint src",
+    "types": "flow src"
+  }
+}

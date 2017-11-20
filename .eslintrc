@@ -1,0 +1,23 @@
+{
+  "parser": "babel-eslint",
+  "plugins": [
+    "flowtype"
+  ],
+  "extends": "./eslint_rules.js",
+  "rules": {
+    "class-methods-use-this": ["error", {
+      "exceptMethods": ["newSkeleton"]
+    }],
+    "no-use-before-define": ["error", {
+      "functions": false
+    }]
+  },
+  "globals": {
+    "describe": false,
+    "it": false,
+    "before": false,
+    "beforeEach": false,
+    "after": false,
+    "afterEach": false
+  }
+}
