@@ -3,7 +3,7 @@
   "plugins": [
     "flowtype"
   ],
-  "extends": "./eslint_rules.js",
+  "extends": "meetnow",
   "rules": {
     "class-methods-use-this": ["error", {
       "exceptMethods": ["newSkeleton"]
