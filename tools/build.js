@@ -14,33 +14,34 @@ const flow = require('rollup-plugin-flow');
 const babel = require('rollup-plugin-babel');
 const cleanup = require('rollup-plugin-cleanup');
 
-const bundles = [
-  {
-    format: 'es',
-    dest: 'lib/index.jsnext.js',
-    transpile: false,
-  },
-  {
-    format: 'cjs',
-    dest: 'lib/index.js',
-    transpile: true,
-  },
-  {
-    format: 'umd',
-    dest: 'lib/index.browser.js',
-    transpile: true,
-  },
+const defaultPresets = [
+  ['env', { modules: false }]
 ];
 
-const babelPlugins = [
+const defaultPlugins = [
   'external-helpers',
   'transform-flow-strip-types',
-  'transform-class-properties',
   'transform-object-rest-spread',
   ['transform-builtin-extend', {
     globals: ['Error'],
     approximate: true,
   }],
+];
+
+const bundles = [
+  {
+    format: 'es',
+    dest: 'lib/index.jsnext.js',
+    presets: [],
+  },
+  {
+    format: 'cjs',
+    dest: 'lib/index.js',
+  },
+  {
+    format: 'umd',
+    dest: 'lib/index.browser.js',
+  },
 ];
 
 let p = Promise.resolve();
@@ -49,32 +50,36 @@ let p = Promise.resolve();
 p = p.then(() => del(['lib/*']));
 
 // Compile
-p = bundles.reduce(
-  (p, def) =>
-    p
-      .then(() =>
-        rollup.rollup({
-          input: 'src/index.js',
-          plugins: (def.transpile ? [
-            babel({
-              babelrc: false,
-              exclude: 'node_modules/**',
-              presets: [['env', { modules: false }]],
-              plugins: babelPlugins,
-            }),
-            cleanup(),
-          ] : [
-            flow({ pretty: true }),
-            cleanup(),
-          ]),
-        }))
-      .then(bundle =>
-        bundle.write({
-          file: def.dest,
-          format: def.format,
-          sourcemap: true,
-          name: def.format === 'umd' ? 'A' : undefined,
-        })),
+p = bundles.reduce((p, def) => {
+  let { dest, format, presets, plugins } = def;
+  if (presets == null) {
+    presets = defaultPresets;
+  }
+  if (plugins == null) {
+    plugins = defaultPlugins;
+  }
+  return p
+    .then(() =>
+      rollup.rollup({
+        input: 'src/index.js',
+        plugins: [
+          babel({
+            babelrc: false,
+            exclude: 'node_modules/**',
+            presets,
+            plugins,
+          }),
+          cleanup(),
+        ],
+      }))
+    .then(bundle =>
+      bundle.write({
+        file: dest,
+        format,
+        sourcemap: true,
+        name: format === 'umd' ? 'A' : undefined,
+      }))
+  },
   p
 );
 
