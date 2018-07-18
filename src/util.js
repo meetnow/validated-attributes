@@ -8,6 +8,8 @@
 // @flow
 //
 
+import type { DetailedType } from './types';
+
 const typeConversion = {
   undefined: 'undefined',
   number: 'number',
@@ -27,16 +29,22 @@ const objToString = Object.prototype.toString;
 
 const objHasOwnProperty = Object.prototype.hasOwnProperty;
 
-export function typeofPlus(x: mixed): string {
+/**
+ A more detailed version of the `typeof` operator
+ @access public
+ */
+export function typeofPlus(x: mixed): DetailedType {
   return typeConversion[typeof x] || typeConversion[objToString.call(x)] || (x ? 'object' : 'null');
 }
 
+/** @access private */
 export function hasOwnProperty(obj: Object, name: string): boolean {
   return objHasOwnProperty.call(obj, name);
 }
 
 /**
  Variant of Object.assign to be consistent across implementations
+ @access private
  */
 export function assign(obj: Object, source: ?Object): Object {
   if (source != null) {
@@ -51,6 +59,7 @@ export function assign(obj: Object, source: ?Object): Object {
 
 /**
  Variant of Object.keys to be consistent across implementations
+ @access private
  */
 export function keys(obj: Object): Array<string> {
   if (typeof obj !== 'function' && (typeof obj !== 'object' || obj === null)) {
@@ -67,6 +76,7 @@ export function keys(obj: Object): Array<string> {
 
 /**
  A variant of the NodeJS' inspect function for internal use
+ @access private
  */
 export function inspect(value: any, depth: number = 3) {
   let isArray;

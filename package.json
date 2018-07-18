@@ -1,7 +1,7 @@
 {
   "name": "validated-attributes",
   "description": "Declarative attributes validation library",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "author": "@meetnow",
   "engines": {
     "node": ">=7.0"
@@ -50,6 +50,8 @@
   },
   "scripts": {
     "build": "node tools/build.js",
+    "docs:md": "documentation build --config docs/documentation.yml src/*.js --access protected --access public -f md -o README.md",
+    "docs:html": "documentation build --config docs/documentation.yml src/*.js --access protected --access public -f html -o docs/html",
     "lint": "eslint src",
     "types": "flow src"
   }

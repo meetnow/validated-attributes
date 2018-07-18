@@ -12,11 +12,23 @@ import { Attribute } from './base';
 
 import { typeofPlus } from './util';
 
+/**
+ Represents a simple fixed value attribute
+
+ The comparison is done with the === operator.
+ @access public
+ */
 export class FixedAttribute extends Attribute {
-  /** The fixed value itself */
+  /**
+   The fixed value itself
+   @access protected
+   */
   value: mixed;
 
-  /** Type of the fixed value */
+  /**
+   Type of the fixed value
+   @access protected
+   */
   valueType: string;
 
   constructor(value: mixed) {
@@ -25,6 +37,12 @@ export class FixedAttribute extends Attribute {
     this.valueType = typeofPlus(value);
   }
 
+  /**
+   Clone the attribute
+
+   Overrides base implementation
+   @access protected
+   */
   _clone(): FixedAttribute {
     return new FixedAttribute(this.value)._copyAttrProps(this);
   }
@@ -33,9 +51,14 @@ export class FixedAttribute extends Attribute {
 /**
  Represents an instanceOf-attribute
 
- The class is instantiated with an emty constructor as default.
+ The class is instantiated with an empty constructor as default.
+ @access public
  */
 export class ObjectAttribute extends Attribute {
+  /**
+   Class object
+   @access protected
+   */
   cls: any;
 
   constructor(Cls: any) {
@@ -43,6 +66,12 @@ export class ObjectAttribute extends Attribute {
     this.cls = Cls;
   }
 
+  /**
+   Clone the attribute
+
+   Overrides base implementation
+   @access protected
+   */
   _clone(): ObjectAttribute {
     return new ObjectAttribute(this.cls)._copyAttrProps(this);
   }

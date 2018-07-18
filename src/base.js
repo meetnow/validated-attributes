@@ -16,6 +16,8 @@ import { assign, inspect } from './util';
  Error class for validation errors
 
  You might want to test a thrown error with `instanceof` against this class.
+
+ @access public
  */
 export class AttributeValidationError extends Error {
   expected: string;
@@ -33,29 +35,46 @@ export class AttributeValidationError extends Error {
 /**
  Base class for attributes
 
- You can inherit from this class to extend Attribute.js; you must override at
- least the `_clone` method.
+ You can inherit from this class to create custom validators; you must override
+ at least the `_clone` method.
+
+ @access public
  */
 export class Attribute {
-  /** Name of the attribute; usually reflects its type */
+  /**
+   Name of the attribute; usually reflects its type
+   @access public
+  */
   name: string;
 
-  /** Arbitrary flags you can use for your application purposes */
+  /**
+   Arbitrary flags you can use for your application purposes
+   @access protected
+   */
   flags: {[string]: mixed};
 
-  /** Default value of the attribute (function that creates a default or immutable value) */
+  /**
+   Default value of the attribute (function that creates a default or immutable
+   value)
+   @access public
+   */
   default: DefaultValue;
 
-  /** Whether this attribute is marked as optional; changes behavior of validate and newSkeleton */
+  /**
+   Whether this attribute is marked as optional; changes behavior of validate
+   and newSkeleton
+   @access public
+   */
   isOptional: bool;
 
-  /** Base validator function */
+  /** @access private */
   _validator: ValidatorFn;
 
   /**
    Base constructor for attribute objects
 
    Takes a validator function and a default value
+   @access protected
    */
   constructor(validator: ValidatorFn, defaultsTo: ?DefaultValue) {
     this.flags = {};
@@ -73,6 +92,7 @@ export class Attribute {
    The default implementation calls the underlying validator function
 
    Note: for use with flow type, cast the returned object to your target type.
+   @access public
    */
   validate(input: mixed): any {
     if (input == null) {
@@ -91,6 +111,7 @@ export class Attribute {
 
    Returns the value set with `defaultsTo` or, if it is a function, invokes
    it and returns its result.
+   @access public
    */
   newDefault(): mixed {
     if (typeof this.default === 'function') {
@@ -108,6 +129,7 @@ export class Attribute {
 
    Works best for schema or tuple attributes since it works recursively; it will
    also remove any fields that are not specified in the schema (!)
+   @access public
    */
   mergeDefault(value: mixed, nullIsUndefined: ?boolean): any {
     if (value === undefined || (value === null && (!this.isOptional || nullIsUndefined))) {
@@ -123,6 +145,7 @@ export class Attribute {
 
    This is most useful for schema or compound attributes, where it will emit
    an object or array whose fields are set to null or which is empty.
+   @access public
    */
   newSkeleton(): mixed {
     return null;
@@ -136,6 +159,7 @@ export class Attribute {
    object.
 
    Clones the attribute object.
+   @access public
    */
   defaultsTo(newDefault: DefaultValue): this {
     const c = this._clone();
@@ -149,6 +173,7 @@ export class Attribute {
    Same as calling `with({'flag1': true, 'flag2': true, ...})`.
 
    Clones the attribute object.
+   @access public
    */
   as(...flags: Array<string>): this {
     const c = this._clone();
@@ -165,6 +190,7 @@ export class Attribute {
    Adds one or more arbitrary flags
 
    Clones the attribute object.
+   @access public
    */
   with(flags: {[string]: mixed}): this {
     const c = this._clone();
@@ -176,6 +202,7 @@ export class Attribute {
    Turns the attribute optional
 
    Clones the attribute object.
+   @access public
    */
   makeOptional(): this {
     const c = this._clone();
@@ -188,6 +215,7 @@ export class Attribute {
 
    Subclasses must override this method, and call `_copyAttrProps` on the new
    instance. Do not call the base implementation.
+   @access protected
    */
   _clone(): Attribute {
     return new Attribute(this._validator)._copyAttrProps(this);
@@ -202,6 +230,7 @@ export class Attribute {
 
    The base implementation copies the name, isOptional, default and flags
    (as shallow copy). Returns `this`.
+   @access protected
    */
   _copyAttrProps(source: Attribute): this {
     this.name = source.name;

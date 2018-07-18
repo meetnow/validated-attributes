@@ -1,0 +1,30 @@
+toc:
+  - name: validated-attributes
+    file: header.md
+
+  - name: Usage
+    file: usage.md
+
+  - name: Base Classes
+    children:
+      - AttributeValidationError
+      - Attribute
+  - name: Simple Attribute Classes
+    children:
+      - FixedAttribute
+      - ObjectAttribute
+  - name: Combined Attribute Classes
+    children:
+      - EnumAttribute
+      - TupleAttribute
+      - CompoundAttribute
+      - SchemaAttribute
+  - name: Functions
+    children:
+      - validate
+      - isValid
+      - newDefault
+      - mergeDefault
+      - newSkeleton
+      - toAttribute
+      - typeofPlus

@@ -26,6 +26,7 @@ import type {
   DefaultValue,
   ElementValidatorFn,
   ElementIterator,
+  DetailedType,
 } from './types';
 
 import {
@@ -40,6 +41,40 @@ const STRING_DATE_RE = /^[0-9]{4}-(1[0-2]|0[1-9])-(3[01]|[1-2][0-9]|0[1-9])$/;
 
 // http://www.regular-expressions.info/email.html
 const EMAIL_RE = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
+
+/**
+ Short-cut to run a validation of the given specification against the given
+ value
+ @access public
+ */
+function validate(spec: any, value: mixed): any {
+  return toAttribute(spec).validate(value);
+}
+
+/**
+ Short-cut to create a default value for the given specification
+ @access public
+ */
+function newDefault(spec: any): any {
+  return toAttribute(spec).newDefault();
+}
+
+/**
+ Short-cut to merge the given value into the given specification, filling up
+ missing values with default values
+ @access public
+ */
+function mergeDefault(spec: any, value: mixed, nullIsUndefined: ?boolean): any {
+  return toAttribute(spec).mergeDefault(value, nullIsUndefined);
+}
+
+/**
+ Short-cut to create a skeleton from the given specification
+ @access public
+ */
+function newSkeleton(spec: any): any {
+  return toAttribute(spec).newSkeleton();
+}
 
 const required = {
   fixed: (v: mixed) => {
@@ -143,11 +178,11 @@ export default {
   EnumAttribute,
   AttributeValidationError,
 
-  validate: (spec: any, value: mixed): any => toAttribute(spec).validate(value),
+  validate,
   isValid,
-  newDefault: (spec: any): any => toAttribute(spec).newDefault(),
-  mergeDefault: (spec: any, value: mixed, nullIsUndefined: ?boolean): any => toAttribute(spec).mergeDefault(value, nullIsUndefined),
-  newSkeleton: (spec: any): any => toAttribute(spec).newSkeleton(),
+  newDefault,
+  mergeDefault,
+  newSkeleton,
   toAttribute,
 
   optional,
@@ -161,4 +196,5 @@ export type {
   DefaultValue,
   ElementValidatorFn,
   ElementIterator,
+  DetailedType,
 };

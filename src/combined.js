@@ -20,9 +20,13 @@ import { typeofPlus, hasOwnProperty } from './util';
  Represents an oneOf-attribute
 
  The first value is used to generate the default.
+ @access public
  */
 export class EnumAttribute extends Attribute {
-  /** List of valid attributes for this enum */
+  /**
+   List of valid attributes for this enum
+   @access protected
+   */
   values: Array<Attribute>;
 
   constructor(values: Array<any>) {
@@ -31,6 +35,12 @@ export class EnumAttribute extends Attribute {
     this.values = attrs;
   }
 
+  /**
+   Clone the attribute
+
+   Overrides base implementation
+   @access protected
+   */
   _clone(): EnumAttribute {
     return new EnumAttribute(this.values)._copyAttrProps(this);
   }
@@ -42,9 +52,13 @@ export class EnumAttribute extends Attribute {
  The default value is an array with default values of each type. The skeleton
  is either `null` for optional tuples or an array with all values set to the
  skeleton of each type.
+ @access public
  */
 export class TupleAttribute extends Attribute {
-  /** Array of attributes to validate the tuple's contents against */
+  /**
+   Array of attributes to validate the tuple's contents against
+   @access protected
+   */
   elements: Array<Attribute>;
 
   constructor(selements: Array<any>) {
@@ -61,6 +75,12 @@ export class TupleAttribute extends Attribute {
     this.elements = elements;
   }
 
+  /**
+   Main method for validation
+
+   Extends base implementation
+   @access public
+   */
   validate(input: any): any {
     super.validate(input);
 
@@ -102,6 +122,12 @@ export class TupleAttribute extends Attribute {
     return input;
   }
 
+  /**
+   Merges the given value with the default of this attribute
+
+   Overrides base implementation
+   @access public
+   */
   mergeDefault(value: mixed, nullIsUndefined: ?boolean): any {
     if (value === undefined || (value === null && (!this.isOptional || nullIsUndefined))) {
       return this.newDefault();
@@ -121,6 +147,12 @@ export class TupleAttribute extends Attribute {
     }
   }
 
+  /**
+   Returns a new skeleton for this attribute
+
+   Overrides base implementation
+   @access public
+   */
   newSkeleton(): ?Array<mixed> {
     if (this.isOptional) {
       return null;
@@ -130,6 +162,12 @@ export class TupleAttribute extends Attribute {
     }
   }
 
+  /**
+   Clone the attribute
+
+   Overrides base implementation
+   @access protected
+   */
   _clone(): TupleAttribute {
     return new TupleAttribute(this.elements)._copyAttrProps(this);
   }
@@ -142,12 +180,18 @@ export class TupleAttribute extends Attribute {
 
  If the attribute is marked as optional, `newSkeleton` will return null.
  Otherwise it creates an empty array or map.
+ @access protected
  */
 export class CompoundAttribute extends Attribute {
-  /** Attribute that all elements must have */
+  /**
+   Attribute that all elements must have
+   @access protected
+   */
   elementAttr: ?Attribute;
 
+  /** @access private */
   _skeletonMaker: () => mixed;
+  /** @access private */
   _iterator: ElementIterator;
 
   constructor(validator: ValidatorFn, skeletonMaker: () => mixed, iterator: ElementIterator) {
@@ -162,6 +206,7 @@ export class CompoundAttribute extends Attribute {
    All values of the compound will be validated against the given attribute.
 
    Clones the attribute object.
+   @access public
    */
   ofType(spec: any): this {
     const c = this._clone();
@@ -177,6 +222,12 @@ export class CompoundAttribute extends Attribute {
     return c;
   }
 
+  /**
+   Main method for validation
+
+   Extends base implementation
+   @access public
+   */
   validate(input: mixed): any {
     super.validate(input);
 
@@ -211,6 +262,12 @@ export class CompoundAttribute extends Attribute {
     return input;
   }
 
+  /**
+   Returns a new skeleton for this attribute
+
+   Overrides base implementation
+   @access public
+   */
   newSkeleton() {
     if (this.isOptional) {
       return null;
@@ -220,10 +277,22 @@ export class CompoundAttribute extends Attribute {
     }
   }
 
+  /**
+   Clone the attribute
+
+   Overrides base implementation
+   @access protected
+   */
   _clone(): CompoundAttribute {
     return new CompoundAttribute(this._validator, this._skeletonMaker, this._iterator)._copyAttrProps(this);
   }
 
+  /**
+   Copies the attribute's properties
+
+   Extends base implementation
+   @access protected
+   */
   _copyAttrProps(source: Attribute): this {
     super._copyAttrProps(source);
     // source is contravariant, need to check
@@ -240,9 +309,13 @@ export class CompoundAttribute extends Attribute {
  The default value is an object with default values of each type for each field.
  The skeleton is either `null` for optional schemas or an object with all values
  set to the skeleton of each type.
+ @access public
  */
 export class SchemaAttribute extends Attribute {
-  /** Fields to validate */
+  /**
+   Fields to validate
+   @access protected
+   */
   fields: {[string]: Attribute};
 
   constructor(sfields: {[string]: any}) {
@@ -269,6 +342,12 @@ export class SchemaAttribute extends Attribute {
     this.fields = fields;
   }
 
+  /**
+   Main method for validation
+
+   Extends base implementation
+   @access public
+   */
   validate(input: any): any {
     super.validate(input);
 
@@ -304,6 +383,12 @@ export class SchemaAttribute extends Attribute {
     return input;
   }
 
+  /**
+   Merges the given value with the default of this attribute
+
+   Overrides base implementation
+   @access public
+   */
   mergeDefault(value: mixed, nullIsUndefined: ?boolean): any {
     if (value === undefined || (value === null && (!this.isOptional || nullIsUndefined))) {
       return this.newDefault();
@@ -322,6 +407,12 @@ export class SchemaAttribute extends Attribute {
     }
   }
 
+  /**
+   Returns a new skeleton for this attribute
+
+   Overrides base implementation
+   @access public
+   */
   newSkeleton() {
     if (this.isOptional) {
       return null;
@@ -337,13 +428,20 @@ export class SchemaAttribute extends Attribute {
     }
   }
 
+  /**
+   Clone the attribute
+
+   Overrides base implementation
+   @access protected
+   */
   _clone(): SchemaAttribute {
     return new SchemaAttribute(this.fields)._copyAttrProps(this);
   }
 }
 
 /**
- Converts a fixed value or tuple or schema
+ Converts a fixed value or tuple or schema to the respective Attribute object
+ @access public
  */
 export function toAttribute(v: any): Attribute {
   if (v instanceof Attribute) {
@@ -373,6 +471,7 @@ export function toAttribute(v: any): Attribute {
  Tests a value against a specification
 
  Returns true or false rather than trowing an exception
+ @access public
  */
 export function isValid(spec: any, value: mixed): boolean {
   try {
