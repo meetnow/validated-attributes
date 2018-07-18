@@ -1,7 +1,7 @@
 {
   "name": "validated-attributes",
   "description": "Declarative attributes validation library",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "author": "@meetnow",
   "engines": {
     "node": ">=7.0"
@@ -44,6 +44,7 @@
   "main": "./lib/index",
   "jsnext:main": "./lib/index.jsnext.js",
   "browser": "./lib/index.browser.js",
+  "react-native": "./lib/index.jsnext.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/meetnow/validated-attributes.git"
