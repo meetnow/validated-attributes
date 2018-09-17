@@ -1,7 +1,7 @@
 {
   "name": "validated-attributes",
   "description": "Declarative attributes validation library",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "author": "@meetnow",
   "engines": {
     "node": ">=7.0"
@@ -16,7 +16,6 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.6",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-builtin-extend": "^1.1.2",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
@@ -30,7 +29,8 @@
     "flow-bin": "^0.76.0",
     "rollup": "^0.62.0",
     "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-cleanup": "^3.0.0"
+    "rollup-plugin-cleanup": "^3.0.0",
+    "rollup-plugin-node-resolve": "^3.4.0"
   },
   "homepage": "https://github.com/meetnow/validated-attributes",
   "keywords": [
@@ -53,5 +53,8 @@
     "docs:html": "documentation build --config docs/documentation.yml src/*.js --access protected --access public -f html -o docs/html",
     "lint": "eslint src",
     "types": "flow src"
+  },
+  "dependencies": {
+    "es6-error": "^4.1.1"
   }
 }

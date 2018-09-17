@@ -8,6 +8,8 @@
 // @flow
 //
 
+import ExtendableError from 'es6-error';
+
 import type { ValidatorFn, DefaultValue } from './types';
 
 import { assign, inspect } from './util';
@@ -19,7 +21,7 @@ import { assign, inspect } from './util';
 
  @access public
  */
-export class AttributeValidationError extends Error {
+export class AttributeValidationError extends ExtendableError {
   expected: string;
   got: mixed;
   optional: boolean;

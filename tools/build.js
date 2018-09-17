@@ -10,7 +10,7 @@
 
 const del = require('del');
 const rollup = require('rollup');
-const flow = require('rollup-plugin-flow');
+const resolve = require('rollup-plugin-node-resolve');
 const babel = require('rollup-plugin-babel');
 const cleanup = require('rollup-plugin-cleanup');
 
@@ -22,10 +22,6 @@ const defaultPlugins = [
   'external-helpers',
   'transform-flow-strip-types',
   'transform-object-rest-spread',
-  ['transform-builtin-extend', {
-    globals: ['Error'],
-    approximate: true,
-  }],
 ];
 
 const bundles = [
@@ -33,14 +29,17 @@ const bundles = [
     format: 'es',
     dest: 'lib/index.jsnext.js',
     presets: [],
+    external: ['es6-error'],
   },
   {
     format: 'cjs',
     dest: 'lib/index.js',
+    external: ['es6-error'],
   },
   {
     format: 'umd',
     dest: 'lib/index.browser.js',
+    external: [],
   },
 ];
 
@@ -51,7 +50,7 @@ p = p.then(() => del(['lib/*']));
 
 // Compile
 p = bundles.reduce((p, def) => {
-  let { dest, format, presets, plugins } = def;
+  let { dest, format, presets, plugins, external } = def;
   if (presets == null) {
     presets = defaultPresets;
   }
@@ -63,6 +62,7 @@ p = bundles.reduce((p, def) => {
       rollup.rollup({
         input: 'src/index.js',
         plugins: [
+          resolve(),
           babel({
             babelrc: false,
             exclude: 'node_modules/**',
@@ -71,6 +71,7 @@ p = bundles.reduce((p, def) => {
           }),
           cleanup(),
         ],
+        external,
       }))
     .then(bundle =>
       bundle.write({

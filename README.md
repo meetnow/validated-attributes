@@ -200,7 +200,7 @@ type.
 
 ### AttributeValidationError
 
-**Extends Error**
+**Extends ExtendableError**
 
 Error class for validation errors
 
